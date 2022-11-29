@@ -11,30 +11,53 @@ def index(request):
     return render(request, "network/index.html")
 
 
-def login_view(request):
+def login_register(request):
     if request.method == "POST":
+        if 'Login' in request.method == "POST":
+            # Attempt to sign user in
+            username = request.POST["username"]
+            password = request.POST["password"]
+            user = authenticate(request, username=username, password=password)
 
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+            # Check if authentication successful
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse("index"))
+            else:
+                return render(request, "network/index.html", {
+                    "message": "Invalid username and/or password."
+                })
+        elif 'Register' in request.method == "POST":
+            username = request.POST["username"]
+            email = request.POST["email"]
 
-        # Check if authentication successful
-        if user is not None:
+            # Ensure password matches confirmation
+            password = request.POST["password"]
+            confirmation = request.POST["confirmation"]
+            if password != confirmation:
+                return render(request, "network/index.html", {
+                    "message": "Passwords must match."
+                }) # need to add message to index.html
+
+            # Attempt to create new user
+            try:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+            except IntegrityError:
+                return render(request, "network/index.html", {
+                    "message": "Username already taken."
+                }) # need to add message to index.html
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            print("Not working")
+            return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "network/login.html")
-
+        return render(request, "network/index.html")
 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
