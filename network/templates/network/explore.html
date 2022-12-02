@@ -1,0 +1,39 @@
+{% extends "network/layout.html" %}
+
+{% block feed_title %}
+<div class="feed__header">
+  <h2>Explore</h2>
+</div>
+{% endblock %}
+
+{% if user.is_authenticated %}
+  <!-- tweetbox starts -->
+  <div class="tweetBox">
+  <form>
+    <div class="tweetbox__input">
+      <img
+        src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
+        alt=""
+      />
+      <input type="text" placeholder="What's happening?" />
+    </div>
+    <button class="tweetBox__tweetButton">Tweet</button>
+  </form>
+</div>
+<!-- tweetbox ends -->
+{% endif %}
+
+{% block post%}
+<h2>
+  Posts made from everyone
+</h2>
+<hr class = "m-2">
+<section>
+  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas mollitia illum ut saepe optio reiciendis aliquam dolor repellendus cumque eligendi voluptas in modi, neque ab soluta amet ipsam animi tempore.
+</section>
+<hr class = "m-2">
+<section>
+  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas mollitia illum ut saepe optio reiciendis aliquam dolor repellendus cumque eligendi voluptas in modi, neque ab soluta amet ipsam animi tempore.
+</section>
+<hr class = "m-2">
+{% endblock %}

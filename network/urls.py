@@ -5,7 +5,9 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("", views.login_register, name="login_register"),
+    path("explore", views.explore, name="explore"),
+    path("following", views.following, name="following"),
+    path("profile", views.profile, name="profile"),
     path("logout", views.logout_view, name="logout"),
-    path("register", views.register, name="register")
+    path('posttweet/', views.post_tweet, name = "post-tweet"),
 ]

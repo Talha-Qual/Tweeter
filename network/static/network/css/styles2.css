@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+section-custom {
+  border-top: black;
+  border-bottom: black;
+  border-radius: 5px;
+  padding: 10px;
+}
+
 body {
   --twitter-color: #50b7f5;
   --twitter-background: #e6ecf0;
@@ -114,10 +121,10 @@ body {
   display: none;
 }
 
-.feed {
+/* .feed {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
+} */
 
 /* tweet box */
 .tweetbox__input img {

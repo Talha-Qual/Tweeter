@@ -22,31 +22,31 @@
     <body>
     <!-- sidebar starts -->
     <div class="sidebar">
-        <i class="fab fa-twitter"></i>
+        <i class="fab fa-twitter pt-0 "></i>
         {% if user.is_authenticated %}
-        <div class="sidebarOption active">
+        <div class="sidebarOption">
           <span class="material-icons"> home </span>
-          <h2>Home</h2>
+          <h2><a class = "custom-link" href = "{% url 'index' %}">Home</a></h2>
         </div>
   
         <div class="sidebarOption">
           <span class="material-icons"> search </span>
-          <h2>Explore</h2>
+          <h2><a class = "custom-link" href = "{% url 'explore' %}">Explore</a></h2>
         </div>
   
-        <div class="sidebarOption">
+        <!-- <div class="sidebarOption">
           <span class="material-icons"> bookmark_border </span>
           <h2>Bookmarks</h2>
-        </div>
+        </div> -->
 
         <div class="sidebarOption">
           <span class="material-icons"> groups </span>
-          <h2>Following</h2>
+          <h2><a class = "custom-link" href = "{% url 'following' %}">Following</a></h2>
         </div>
   
         <div class="sidebarOption">
           <span class="material-icons"> perm_identity </span>
-          <h2>Profile</h2>
+          <h2><a class = "custom-link" href = "{% url 'profile' %}">Profile</a></h2>
         </div>
 
         <div class="sidebarOption">
@@ -54,19 +54,15 @@
           <h2><a class = "custom-link" href = "{% url 'logout' %}">Log Out</a></h2>
         </div>
 
-        <button class="sidebar__tweet">Tweet</button>
-        {% else %}
-        <div class="sidebarOption active">
-          <span class="material-icons"> home </span>
-          <h2>Home</h2>
-        </div>
+        <!-- <button type = "button" class="sidebar__tweet">Tweet</button> -->
 
+        {% else %}
         <div class="sidebarOption">
           <span class="material-icons"> search </span>
-          <h2>Explore</h2>
+          <h2><a class = "custom-link" href = "{% url 'explore' %}">Explore</a></h2>
         </div>
 
-        <form action = "{% url 'login_register' %}" method = "POST">
+        <form action = "{% url 'index' %}" method = "POST">
           {% csrf_token %}
           <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
@@ -82,6 +78,7 @@
                 <div class="form-group">
                     <input class="form-control" type="password" name="password" placeholder="Password">
                 </div>
+                <input type = "hidden" name = "mode" value = "login">
                 <button type = "submit" value = "Login" class="btn btn-primary">Log In</button>
                 <div class="modal-footer">
                 </div>
@@ -93,10 +90,10 @@
               </div>
             </div>
           </div>
-          </form>
+        </form>
 
-          <form action = "{% url 'login_register' %}" method = "POST">
-            {% csrf_token %}
+        <form action = "{% url 'index' %}" method = "POST">
+          {% csrf_token %}
           <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
@@ -117,48 +114,40 @@
                   <div class="form-group">
                       <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
                   </div>
+                  <input type = "hidden" name = "mode" value = "register">
                   <input class="btn btn-primary" type="submit" value = "Register">
                 </div>
                 <div class="modal-footer">
                   <span>
                     Already have an account?
-                  <a style = "color: blue;" type = "button" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal"> Log in Here</a>
+                  <a style = "color: blue;" type = "button" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal"> Log in Here </a>
                   </span>
                 </div>
               </div>
             </div>
           </div>
         </form>
-          <div class="sidebarOption">
-            <span class="material-icons"> login </span>
-            <h2><div data-bs-toggle="modal" href="#exampleModalToggle">Log In</div></h2>
-          </div>
+        <div class="sidebarOption">
+          <span class="material-icons"> login </span>
+          <h2><div data-bs-toggle="modal" href="#exampleModalToggle">Log In</div></h2>
+        </div>
           <!-- <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a> -->
         {% endif %}
       </div>
-      </div>
       <!-- sidebar ends -->
     <!-- feed starts -->
-    <div class="feed">
-        <div class="feed__header">
-          <h2>Home</h2>
-        </div>
-  
-        <!-- tweetbox starts -->
-        <div class="tweetBox">
-          <form>
-            <div class="tweetbox__input">
-              <img
-                src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-                alt=""
-              />
-              <input type="text" placeholder="What's happening?" />
-            </div>
-            <button class="tweetBox__tweetButton">Tweet</button>
-          </form>
-        </div>
-        <!-- tweetbox ends -->
-      </div>
+    <div class = "container ">
+      <article class = "row justify-content-center">
+          {% block feed_title %}
+          {% endblock %}
+    
+          {% block tweet_box %}
+          {% endblock %}
+          
+          {% block post %}
+          {% endblock %}
+      </article>
+    </div>
       <!-- feed ends -->
   
       <!-- widgets starts -->

@@ -1,0 +1,30 @@
+{% extends "network/layout.html" %}
+
+{% block feed_title %}
+<div class="feed__header">
+  <h2>Following</h2>
+</div>
+{% endblock %}
+
+{% block tweet_box %}
+  <!-- tweetbox starts -->
+  <div class="tweetBox">
+  <form>
+    <div class="tweetbox__input">
+      <img
+        src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
+        alt=""
+      />
+      <input type="text" placeholder="What's happening?" />
+    </div>
+    <button class="tweetBox__tweetButton">Tweet</button>
+  </form>
+</div>
+<!-- tweetbox ends -->
+{% endblock %}
+
+{% block post %}
+<h2>
+  Posts made by people you follow here!
+</h2>
+{% endblock %}

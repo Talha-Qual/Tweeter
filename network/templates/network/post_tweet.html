@@ -1,0 +1,46 @@
+<script>
+  document.addEventListener('DOMContentLoaded', ()=> {
+    var show_post = document.getElementById('post-hidden')
+    show_post.style.display = "none"
+    document.querySelector('#tweet-form').onsubmit = ()=> {
+      form = document.querySelector('#tweet-form');
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then (data => {
+        console.log(data)
+        addTweet(data)
+      })
+      document.querySelector('#tweet-text').value = '';
+      return false;
+    }
+  })
+
+  function addTweet(data) {
+    // const p = document.createElement('p');
+    var show_post = document.getElementById('post-hidden')
+    show_post.style.display = "flex"
+    const p = document.getElementById('tweet-para')
+    p.innerHTML = `${data["tweet"]}`;
+    document.querySelector('#post-header').append(p)
+  }
+</script>
+
+  <!-- tweetbox starts -->
+  <div class="tweetBox">
+  <form id = "tweet-form" action = "{% url 'post-tweet' %}" method = "POST">
+    {% csrf_token %}
+    <div class="tweetbox__input">
+      <img
+        src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
+        alt=""
+      />
+      <input type="text" placeholder="What's happening?" id = "tweet-text" name = "tweet" />
+    </div>
+    <button class="tweetBox__tweetButton" type = "submit" >Tweet</button>
+  </form>
+</div>
+<!-- tweetbox ends -->
