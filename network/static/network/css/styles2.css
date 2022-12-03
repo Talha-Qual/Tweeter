@@ -11,6 +11,10 @@ section-custom {
   padding: 10px;
 }
 
+.form-control .custom  {
+  border-radius: 25px;
+}
+
 body {
   --twitter-color: #50b7f5;
   --twitter-background: #e6ecf0;

@@ -11,6 +11,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     follower = models.ManyToManyField(User,  blank=True, related_name="follower_user")
     following = models.ManyToManyField(User,  blank=True, related_name="following_user")
+    handle = models.CharField(max_length = 15, null = True, blank = True)
 
     def __str__(self):
         return self.user.username
@@ -21,3 +22,6 @@ class Tweet(models.Model):
     comment = models.CharField(max_length=280, null=True, blank = True)
     like = models.ManyToManyField(User, blank=True, related_name="liked_user")
     created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username

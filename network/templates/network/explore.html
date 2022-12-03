@@ -6,6 +6,10 @@
 </div>
 {% endblock %}
 
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
+
 {% if user.is_authenticated %}
   <!-- tweetbox starts -->
   <div class="tweetBox">

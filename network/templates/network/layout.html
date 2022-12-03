@@ -46,7 +46,7 @@
   
         <div class="sidebarOption">
           <span class="material-icons"> perm_identity </span>
-          <h2><a class = "custom-link" href = "{% url 'profile' %}">Profile</a></h2>
+          <h2><a class = "custom-link" href = "{% url 'profile' user.username %}">Profile</a></h2>
         </div>
 
         <div class="sidebarOption">
@@ -62,7 +62,7 @@
           <h2><a class = "custom-link" href = "{% url 'explore' %}">Explore</a></h2>
         </div>
 
-        <form action = "{% url 'index' %}" method = "POST">
+        <form action = "{% url 'login_register' %}" method = "POST">
           {% csrf_token %}
           <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
@@ -72,19 +72,23 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <div class="form-group">
-                    <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+                <div class="form-group mb-3">
+                  <input autofocus class="form-control" type="text" name="username" placeholder="Username" required>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="Password">
+                <div class="form-group mb-3">
+                    <input class="form-control" type="password" name="password" placeholder="Password" required>
                 </div>
                 <input type = "hidden" name = "mode" value = "login">
-                <button type = "submit" value = "Login" class="btn btn-primary">Log In</button>
+                <button type = "submit" value = "Login" class="btn btn-primary mb-3">Log In</button>
                 <div class="modal-footer">
                 </div>
-                <span>
+                <span class = "mb-2">
                   Don't have an account?
                   <a style = "color: blue;" type = "button" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal"> Register here.</a>
+                </span>
+                <br>
+                <span>
+                  Forgot your password? click <a style = "color: blue;" type = "submit">here</a>
                 </span>
                 </div>
               </div>
@@ -92,7 +96,7 @@
           </div>
         </form>
 
-        <form action = "{% url 'index' %}" method = "POST">
+        <form action = "{% url 'login_register' %}" method = "POST">
           {% csrf_token %}
           <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
@@ -102,20 +106,23 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <div class="form-group">
-                      <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+                  <div class="form-group mb-3">
+                      <input class="form-control" autofocus type="text" name="username" placeholder="Username" required>
                   </div>
-                  <div class="form-group">
-                      <input class="form-control" type="email" name="email" placeholder="Email Address">
+                  <div class="form-group mb-3">
+                    <input class="form-control" type="text" name="tw_handle" placeholder="Twitter Handle" required>
                   </div>
-                  <div class="form-group">
-                      <input class="form-control" type="password" name="password" placeholder="Password">
+                  <div class="form-group mb-3">
+                      <input class="form-control" type="email" name="email" placeholder="Email Address" required>
                   </div>
-                  <div class="form-group">
-                      <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                  <div class="form-group mb-3">
+                      <input class="form-control" type="password" name="password" placeholder="Password" required>
+                  </div>
+                  <div class="form-group mb-3">
+                      <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password" required>
                   </div>
                   <input type = "hidden" name = "mode" value = "register">
-                  <input class="btn btn-primary" type="submit" value = "Register">
+                  <input class="btn btn-primary mb-3" type="submit" value = "Register">
                 </div>
                 <div class="modal-footer">
                   <span>

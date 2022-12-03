@@ -6,44 +6,19 @@
 </div>
 {% endblock %}
 
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
+
 <!-- This is where we add new tweets. -->
 {% block tweet_box %}
   {% include "network/post_tweet.html" %}
 {% endblock %}
 
-<!-- This is where the new tweets will show up, also old tweets will be displayed here. -->
 {% block post %}
-<div class="post" id = "post-hidden">
-  <div class="post__avatar">
-    <img
-      src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-      alt=""
-    />
-  </div>
-
-  <div class="post__body">
-    <div class="post__header">
-      <div class="post__headerText" id = "post-header">
-        <h3>
-          Talha Ali
-          <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>@tali</span>
-        </h3>
-        <div class="post__headerDescription" >
-          <p id = "tweet-para">This should be hidden</p>
-        </div>
-      </div>
-    </div>
-    <img
-      src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-      alt=""
-    />
-    <div class="post__footer">
-      <span class="material-icons"> repeat </span>
-      <span class="material-icons"> favorite_border </span>
-      <span class="material-icons"> publish </span>
-    </div>
-  </div>
-</div>
+<!-- This is where the post created by a JSON repsonse will be recorded. -->
+<div id = "over-post"></div>
+<!-- This is where the new tweets will show up, also old tweets will be displayed here. -->
 {% for t in tweets %}
 <div class="post" id = "post">
   <div class="post__avatar">
@@ -57,7 +32,7 @@
     <div class="post__header">
       <div class="post__headerText">
         <h3>
-          Talha Ali
+          {{ t.user }}
           <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>@tali</span>
         </h3>
       </div>
