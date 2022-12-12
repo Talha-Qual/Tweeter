@@ -1,1 +1,17 @@
+# Python
+*.pyc
+*~
+__pycache__/
+__pycache__
+
+# Env
+.env
+myvenv/
+venv/
+
+# Database
+db.sqlite3
+
 K:/Django_Projects/project4/project4/.env
+
+project4/.env

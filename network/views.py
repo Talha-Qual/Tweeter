@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib import messages
+import random
+from django.core.paginator import Paginator
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -8,7 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import User, Tweet, Profile
 from django.http import JsonResponse
-
+from django.views.generic import FormView, TemplateView
+from .forms import ContactForm
+from django.urls import reverse_lazy
 
 from .models import User
 
@@ -33,6 +37,19 @@ class PasswordResetConfirmView():
 
 class PasswordResetCompleteView():
     template_name = 'registration/password_reset_complete.html'
+
+class ContactView(FormView):
+    template_name = 'contact/contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('success')
+
+    def form_valid(self, form):
+        # Calls the custom send method
+        form.send()
+        return super().form_valid(form)
+
+class ContactSuccessView(TemplateView):
+    template_name = 'contact/success.html'
 
 def login_register(request):
     if request.method == "POST":
@@ -161,7 +178,11 @@ def like(request):
         'error': 'error processing request, try again later.', 'status': 400})
 
 def explore(request):
-    return render(request, "network/explore.html")
+    tweets = list(Tweet.objects.all())
+    random_tweets = random.sample(tweets, 5)
+    return render(request, "network/explore.html", {
+        'random_tweets': random_tweets
+    })
 
 """Function to return all of the posts by people you are following. Return type: JSON"""
 @login_required(login_url = 'explore')

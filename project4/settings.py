@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django_extensions',
     'django.contrib.staticfiles',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -138,8 +141,6 @@ STATIC_URL = '/static/'
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
-
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = get_env_variable('EMAIL_HOST')
 EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
@@ -147,3 +148,4 @@ EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = get_env_variable('DEFAULT_FROM_EMAIL')
+RECIPIENT_ADDRESS = get_env_variable('RECIPIENT_ADDRESS')

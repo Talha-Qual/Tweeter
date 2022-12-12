@@ -70,13 +70,22 @@
         <p id = "tweet-para">{{ t.tweet }}</p>
       </div>
     </div>
-    <img
-      src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-      alt=""
-    />
     <div class="post__footer">
+      {% csrf_token %}
       <span class="material-icons"> repeat </span>
-      <span class="material-icons"> favorite_border </span>
+      <img 
+      data-id = "{{t.id}}"
+      id = "tweet-like-{{t.id}}"
+      class = "like-selected"
+      {% if not request.user in t.like.all %}
+      data-liked = 'no' 
+      src = "{% static 'network/images/heart_unlike.png' %}"
+      {% else %}
+      data-liked = 'yes'
+      src = "{% static 'network/images/heart_like.png' %}"
+      {% endif %}
+      />
+      <span id = "like-count-{{t.id}}">{{t.like.count}}</span>
       <span class="material-icons"> publish </span>
     </div>
   </div>

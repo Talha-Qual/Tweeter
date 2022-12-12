@@ -5,7 +5,7 @@
 }
 
 .mt-5 {
-  margin-top: 29rem !important
+  margin-top: 24rem !important
 }
 section-custom {
   border-top: black;
@@ -96,6 +96,14 @@ body {
   margin-left: auto;
   margin-right: auto;
   padding: 0 10px;
+}
+
+.float-left {
+  float:left;
+}
+
+.float-right {
+  float:right;
 }
 
 .sidebar {

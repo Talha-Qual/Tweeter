@@ -36,16 +36,15 @@
         <h3>
           <a href="{% url 'profile' t.user.username%}">{{t.user.username}}</a>
           <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>{% if profile.handle %}@{{ profile.user.handle}}{%else%}rick_astley{%endif%}</span>
+          <div class = "float-right">
+            {{t.created_at|timesince }} ago
+          </div>
         </h3>
       </div>
       <div class="post__headerDescription">
         <p id = "tweet-para">{{ t.tweet }}</p>
       </div>
     </div>
-    <img
-      src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-      alt=""
-    />
     <div class="post__footer">
       {% csrf_token %}
       <span class="material-icons"> repeat </span>
