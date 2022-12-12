@@ -1,13 +1,18 @@
 {% extends "network/layout.html" %}
 
+
 {% block feed_title %}
 <div class="feed__header">
   <h2>Explore</h2>
 </div>
 {% endblock %}
 
-{% if message %}
-<div>{{ message }}</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
 
 {% if user.is_authenticated %}

@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib import messages
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from .models import User, Tweet, Profile
 from django.http import JsonResponse
@@ -31,15 +33,6 @@ class PasswordResetConfirmView():
 
 class PasswordResetCompleteView():
     template_name = 'registration/password_reset_complete.html'
-
-
-# class LoginView():
-#     template_name = 'network/layout.html'
-#     redirect_field_name = 'network/index'
-
-# class LogoutView():
-#     template_name = 'network/layout.html'
-#     redirect_field_name = 'network/explore'
 
 def login_register(request):
     if request.method == "POST":
@@ -74,7 +67,7 @@ def login_register(request):
             try:
                 user = User.objects.create_user(username, email, password)
                 user.save()
-                profile = Profile.objects.create(user = user, handle = tw_handle)
+                Profile.objects.create(user = user, handle = tw_handle)
             except IntegrityError:
                 return render(request, "network/explore.html", {
                     "message": "Username already taken."
@@ -92,8 +85,33 @@ def logout_view(request):
 
 @login_required(login_url = 'explore')
 def index(request):
+    all_users  = User.objects.all().values('username')
     tweets = Tweet.objects.all().order_by('-created_at')
-    return render(request, "network/index.html", {'tweets': tweets})
+    user_list = []
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except:
+        logout(request)
+        return redirect('explore')
+
+    if request.method == "GET":
+        search = request.GET.get("q")
+        if search is not None:
+            search = search.lower().strip()
+            for key in all_users:
+                for idx in key:
+                    print(idx)
+                    if search == key[idx].lower():
+                        username = search
+                        return redirect("profile", username)
+                if user_list:
+                    return render(request, "network/search_profile.html", {
+                        "user_list": user_list,
+                        "search": search
+                    })
+    return render(request, "network/index.html", {
+        'tweets': tweets,
+        'profile': profile})
 
 """Need to think of a way to return a JSON response here and get it picked up by 
 a js function for the async call. Might start with just returning a post to make 
@@ -105,30 +123,97 @@ def post_tweet(request):
             t = Tweet.objects.create(user = request.user, tweet = request.POST.get('tweet'))
             return JsonResponse({
                 'tweet': t.tweet,
-                'tweeter': f'{t.user}',
+                'tweeter': request.user.username,
+                'tweet_id': t.id,
                 'created_at': t.created_at,
-                'status': 200
             })
-        return JsonResponse({}, status = 400)
-    return JsonResponse({}, status = 400)
+        return JsonResponse({
+            'error': 'tweet length needs to be longer.'}, status = 400)
+    return JsonResponse({
+        'error': 'error processing request, try again.'}, status = 400)
 
 """Return type: JSON"""
+@csrf_exempt
 @login_required(login_url = 'explore')
 def like(request):
-    pass
+    if request.method == "POST":
+        tweet_id = request.POST.get('id')
+        liked = request.POST.get('liked')
+        try:
+            tweet = Tweet.objects.get(id = tweet_id)
+            # if the tweet is already liked, remove the like
+            if liked == 'yes':
+                tweet.like.remove(request.user)
+                liked = 'no'
+            elif liked == 'no':
+                tweet.like.add(request.user)
+                liked = 'yes'
+            tweet.save()
+            return JsonResponse({
+            'likes': tweet.like.count(),
+            'liked': liked,
+            'status': 200})
+        except:
+            return JsonResponse({
+                'error': 'tweet not found.',
+                'status': 400})
+    return JsonResponse({
+        'error': 'error processing request, try again later.', 'status': 400})
 
 def explore(request):
     return render(request, "network/explore.html")
 
-"""Return type: JSON"""
+"""Function to return all of the posts by people you are following. Return type: JSON"""
 @login_required(login_url = 'explore')
 def following(request):
-    return render(request, "network/following.html")
+    try:
+        following = Profile.objects.get(user=request.user).following.all()
+    except:
+        logout(request)
+        return redirect('explore')
+    tweets = Tweet.objects.filter(user__in=following).order_by('-created_at')
+    return render(request, "network/following.html", {
+        'tweets': tweets
+    })
 
-"""Return type: JSON"""
+"""Function to follow a user, this is so you can see posts from people you are following, see list of followers, etc.  Return type: JSON"""
+@csrf_exempt
 @login_required(login_url = 'explore')
 def follow(request):
-    pass
+    if request.method == "POST":
+        curr_user = request.POST.get('user')
+        user_action = request.POST.get('user_action')
+        if user_action == "Follow":
+            # add to list of people the current user is following
+            user = User.objects.get(username=curr_user)
+            profile = Profile.objects.get(user=request.user)
+            profile.following.add(user)
+            profile.save()
+            # add to list of followers the user has
+            profile = Profile.objects.get(user=user)
+            profile.follower.add(request.user)
+            profile.save()
+            return JsonResponse({
+                'status': 200,
+                'user_action': 'Unfollow',
+                'follower_count': profile.follower.count()})
+        else:
+            # remove user from list of people the current user is following
+            user = User.objects.get(username=curr_user)
+            profile = Profile.objects.get(user=request.user)
+            profile.following.remove(user)
+            profile.save()
+            print(user_action)
+            # remove user from list of followers
+            profile = Profile.objects.get(user=user)
+            profile.follower.remove(request.user)
+            profile.save()
+            return JsonResponse({
+                'status': 200,
+                'user_action': "Follow",
+                "follower_count": profile.follower.count()
+            })
+    return JsonResponse({'status': 400})
 
 @login_required(login_url = 'explore')
 def edit_tweet(request):
@@ -139,6 +224,7 @@ def profile(request, username):
     try:
         user = User.objects.get(username = username)
         profile = Profile.objects.get(user = user)
+        users_profile = Profile.objects.get(user=request.user)
     except:
         messages.error(request, 'Unable to fetch user profile information')
         return render(request, 'network/error_page.html')
@@ -147,6 +233,8 @@ def profile(request, username):
         'user': user,
         'profile': profile,
         'tweets': tweets,
+        'users_profile': users_profile,
+        'tweet_amount': len(tweets)
     }
     return render(request, "network/profile.html", context)
 

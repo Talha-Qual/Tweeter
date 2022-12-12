@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+
+{% block feed_title %}
+<div class="feed__header">
+  <h2>Search</h2>
+</div>
+{% endblock %}
+
+{% block post %}
+<h2> No exact matches, check this out!</h2>
+{{user_list}}
+{{search}}
+{% endblock %}

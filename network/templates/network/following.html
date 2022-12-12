@@ -1,30 +1,49 @@
 {% extends "network/layout.html" %}
-
+{% load static %}
 {% block feed_title %}
 <div class="feed__header">
   <h2>Following</h2>
 </div>
 {% endblock %}
 
-{% block tweet_box %}
-  <!-- tweetbox starts -->
-  <div class="tweetBox">
-  <form>
-    <div class="tweetbox__input">
-      <img
-        src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-        alt=""
-      />
-      <input type="text" placeholder="What's happening?" />
-    </div>
-    <button class="tweetBox__tweetButton">Tweet</button>
-  </form>
-</div>
-<!-- tweetbox ends -->
-{% endblock %}
-
 {% block post %}
+{% if tweets %}
+{% for t in tweets %}
+<div class="post" id = "post">
+  <div class="post__avatar">
+    <img
+      src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
+      alt=""
+    />
+  </div>
+
+  <div class="post__body">
+    <div class="post__header">
+      <div class="post__headerText">
+        <h3>
+          {{ t.user }}
+          <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>@tali</span>
+        </h3>
+      </div>
+      <div class="post__headerDescription">
+        <p id = "tweet-para">{{ t.tweet }}</p>
+      </div>
+    </div>
+    <img
+      src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
+      alt=""
+    />
+    <div class="post__footer">
+      <span class="material-icons"> repeat </span>
+      <span class="material-icons"> favorite_border </span>
+      <span class="material-icons"> publish </span>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% else %}
 <h2>
-  Posts made by people you follow here!
+  It doesn't look like anyone has posted anything recently :( Try following more people!
 </h2>
+{% endif %}
 {% endblock %}

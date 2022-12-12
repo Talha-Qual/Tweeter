@@ -1,4 +1,6 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
 
 {% block feed_title %}
 <div class="feed__header">
@@ -32,8 +34,8 @@
     <div class="post__header">
       <div class="post__headerText">
         <h3>
-          {{ t.user }}
-          <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>@tali</span>
+          <a href="{% url 'profile' t.user.username%}">{{t.user.username}}</a>
+          <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>{% if profile.handle %}@{{ profile.user.handle}}{%else%}rick_astley{%endif%}</span>
         </h3>
       </div>
       <div class="post__headerDescription">
@@ -45,11 +47,24 @@
       alt=""
     />
     <div class="post__footer">
+      {% csrf_token %}
       <span class="material-icons"> repeat </span>
-      <span class="material-icons"> favorite_border </span>
+      <img 
+      data-id = "{{t.id}}"
+      id = "tweet-like-{{t.id}}"
+      class = "like-selected"
+      {% if not request.user in t.like.all %}
+      data-liked = 'no' 
+      src = "{% static 'network/images/heart_unlike.png' %}"
+      {% else %}
+      data-liked = 'yes'
+      src = "{% static 'network/images/heart_like.png' %}"
+      {% endif %}
+      />
+      <span id = "like-count-{{t.id}}">{{t.like.count}}</span>
       <span class="material-icons"> publish </span>
     </div>
   </div>
 </div>
 {% endfor %}
-{% endblock%}
+{% endblock %}
